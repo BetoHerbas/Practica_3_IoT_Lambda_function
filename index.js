@@ -1,7 +1,8 @@
 const Alexa = require('ask-sdk-core');
 const AWS = require('aws-sdk');
-const IotData = new AWS.IotData({ endpoint: ENDPOINT });
+const IotData = new AWS.IotData({ endpoint: 'a3lhpt6z01b2r3-ats.iot.us-east-2.amazonaws.com' });
 
+// Función para obtener el shadow de un dispositivo de forma dinámica
 function getShadowPromise(thingName) {
     return new Promise((resolve, reject) => {
         IotData.getThingShadow({ thingName }, (err, data) => {
@@ -15,6 +16,7 @@ function getShadowPromise(thingName) {
     });
 }
 
+// Función para actualizar el shadow de un dispositivo de forma dinámica
 function updateShadowPromise(thingName, payload) {
     return new Promise((resolve, reject) => {
         IotData.updateThingShadow({ thingName, payload }, (err, data) => {
@@ -34,7 +36,7 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Bienvenido a tu banda inteligente, tienes las opciones de consultar tu ritmo cardiaco y tus calorías quemadas. ¿Qué deseas hacer?';
+        const speakOutput = 'Bienvenido a tu banda inteligente, tienes las opciones de consultar tu ritmo cardiaco y modificar los valores minimo y máximo en los que quieres recibir una notificación. ¿Qué deseas hacer?';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -43,6 +45,7 @@ const LaunchRequestHandler = {
     }
 };
 
+// Handler para consultar el pulso de un dispositivo específico
 const CheckHeartbeatIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -76,6 +79,7 @@ const CheckHeartbeatIntentHandler = {
     }
 };
 
+// Handler para consultar calorías de un dispositivo específico
 const CheckCaloriesIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -98,6 +102,7 @@ const CheckCaloriesIntentHandler = {
     }
 };
 
+// Handler para cambiar el valor máximo de pulsaciones
 const ChangeMaxHeartbeatIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
@@ -127,6 +132,7 @@ const ChangeMaxHeartbeatIntentHandler = {
     }
 };
 
+// Handler para cambiar el valor mínimo de pulsaciones
 const ChangeMinHeartbeatIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' &&
